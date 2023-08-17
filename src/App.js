@@ -6,6 +6,7 @@ function App() {
     email: '',
     message: ''
   });
+  const [savedId, setSavedId] = useState(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -15,16 +16,34 @@ function App() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Form Data:', formData);
+
+    try {
+      const response = await fetch('http://localhost:5500/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Error saving form data');
+      }
+
+      const data = await response.json();
+      setSavedId(data.id);
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   };
 
   return (
     <div>
       <h1>Simple React Form</h1>
       <form onSubmit={handleSubmit}>
-        <label>
+         <label>
           Name:
           <input
             type="text"
@@ -55,6 +74,7 @@ function App() {
         <br />
         <button type="submit">Submit</button>
       </form>
+      {savedId && <p>Form Data saved with ID: {savedId}</p>}
     </div>
   );
 }
