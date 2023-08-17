@@ -7,6 +7,7 @@ function App() {
     message: ''
   });
   const [savedId, setSavedId] = useState(null);
+  const [data, setData] = useState([]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -27,7 +28,7 @@ function App() {
         },
         body: JSON.stringify(formData)
       });
-
+      
       if (!response.ok) {
         throw new Error('Error saving form data');
       }
@@ -36,6 +37,19 @@ function App() {
       setSavedId(data.id);
     } catch (error) {
       console.error('An error occurred:', error);
+    }
+  };
+
+  const handleViewClick = async () => { 
+    if (savedId) {
+      try {
+        const response = await fetch(`http://localhost:5500/data?id=${savedId}`);
+        const fetchedData = await response.json();
+        setData(fetchedData);
+        console.log(fetchedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   };
 
@@ -73,8 +87,20 @@ function App() {
         </label>
         <br />
         <button type="submit">Submit</button>
+        {savedId && <p>Form Data saved with ID: {savedId}</p>}
+        <button onClick={handleViewClick} disabled={!savedId}>View Data</button>
+        {data.length > 0 && (
+      <div>
+        <h2>Fetched Data:</h2>
+        <ul>
+          {data.map(item => (
+            <li key={item.id}>{item.fetchedData}</li>
+          ))}
+        </ul>
+      </div>
+    )}
       </form>
-      {savedId && <p>Form Data saved with ID: {savedId}</p>}
+      
     </div>
   );
 }
