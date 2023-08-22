@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
+import Ticket from './ticket';
+import Timings from "./timings";
 
 function App() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    gender: '',
+    destination:''
   });
   const [savedId, setSavedId] = useState(null);
-  const [data, setData] = useState([]);
-
+  const [data, setData] = useState({});
+  let tick=false;
+  const t=<Timings />
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value} = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value
@@ -47,6 +52,10 @@ function App() {
         const fetchedData = await response.json();
         setData(fetchedData);
         console.log(fetchedData);
+        tick=true;
+        console.log(t);
+        // const keys = Object.keys(fetchedData);
+        // console.log("res", keys);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -55,7 +64,7 @@ function App() {
 
   return (
     <div>
-      <h1>Simple React Form</h1>
+      <h1>Plane Ticket Booking</h1>
       <form onSubmit={handleSubmit}>
          <label>
           Name:
@@ -75,8 +84,51 @@ function App() {
             value={formData.email}
             onChange={handleChange}
           />
-        </label>
+        </label> <br />
+        <label>
+        Gender:
+        <input
+          type="radio"
+          name="gender"
+          value="male"
+          checked={formData.gender === 'male'}
+          onChange={handleChange}
+        /> Male
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="gender"
+          value="female"
+          checked={formData.gender === 'female'}
+          onChange={handleChange}
+        /> Female
+      </label>
+
         <br />
+        <label>
+            Destination:
+            <select
+              name="destination"
+              value={formData.destination}
+              onChange={handleChange}
+            >
+              <option value="">Select a country</option>
+              <option value="usa">United States</option>
+              <option value="canada">Canada</option>
+              <option value="india">India</option>
+              <option value="china">China</option>
+              <option value="indonasia">Indonasia</option>
+              <option value="japan">Japan</option>
+              <option value="germany">Germany</option>
+              <option value="australia">Australia</option>
+              <option value="brazil">Brazil</option>
+              <option value="argentina">Argentina</option>
+            </select>
+          </label>
+          <br /><br /><br />
+          <br />
+
         <label>
           Message:
           <textarea
@@ -86,23 +138,26 @@ function App() {
           />
         </label>
         <br />
-        <button type="submit">Submit</button>
+        <button type="submit">Submit</button>  
+        </form>
         {savedId && <p>Form Data saved with ID: {savedId}</p>}
         <button onClick={handleViewClick} disabled={!savedId}>View Data</button>
-        {data.length > 0 && (
-      <div>
-        <h2>Fetched Data:</h2>
-        <ul>
-          {data.map(item => (
-            <li key={item.id}>{item.fetchedData}</li>
-          ))}
-        </ul>
-      </div>
-    )}
-      </form>
-      
+        {/* {Object.entries(data).length > 0 && (
+          <div>
+            <h2>Fetched Data:</h2>
+            <ul>
+              {Object.entries(data).map(([key, value]) => (
+                <li key={key}>
+                  {key}: {value}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )} */}
+        { Object.entries(data).length > 0 && <Ticket destination={data.destination} values={t}/> }
+        
     </div>
   );
-}
+} 
 
 export default App;
