@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Ticket from './ticket';
-import Timings from "./timings";
+import r from "./timings";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -12,8 +12,12 @@ function App() {
   });
   const [savedId, setSavedId] = useState(null);
   const [data, setData] = useState({});
-  let tick=false;
-  const t=<Timings />
+  const timer=["6 am","10 am", "2pm"]
+  const flight=["Indigo Airlines","Air India","Emirates"];
+  let x="m";
+  // let tick=false;
+  // let t={};
+  // t=<Timings />
   const handleChange = (event) => {
     const { name, value} = event.target;
     setFormData((prevData) => ({
@@ -52,8 +56,8 @@ function App() {
         const fetchedData = await response.json();
         setData(fetchedData);
         console.log(fetchedData);
-        tick=true;
-        console.log(t);
+        // tick=true;
+        // console.log(t);
         // const keys = Object.keys(fetchedData);
         // console.log("res", keys);
       } catch (error) {
@@ -61,7 +65,12 @@ function App() {
       }
     }
   };
-
+  if(data.destination==='india')
+    x=r.m;
+  else if(data.destination==="usa")
+     x=r.c;
+  else
+    x=r.q
   return (
     <div>
       <h1>Plane Ticket Booking</h1>
@@ -154,8 +163,11 @@ function App() {
             </ul>
           </div>
         )} */}
-        { Object.entries(data).length > 0 && <Ticket destination={data.destination} values={t}/> }
         
+        { Object.entries(data).length > 0 && <h1>Available Tickets for: {data.destination}</h1>}
+        { Object.entries(data).length > 0 && <Ticket  flightName={x.t1.name} location={x.t1.location} time={x.t1.time}    /> }
+        { Object.entries(data).length > 0 && <Ticket  flightName={x.t2.name} location={x.t2.location} time={x.t2.time}    /> }
+        { Object.entries(data).length > 0 && <Ticket  flightName={x.t3.name} location={x.t3.location} time={x.t3.time}    /> }
     </div>
   );
 } 

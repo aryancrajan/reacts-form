@@ -1,22 +1,15 @@
 import React from "react";
-
+import './ticket.css'
 
 function Ticket(props){
-    const {destination,t}= props
+    const {flightName,location,time}= props
     return (
-        <div>
-            <h1>Available Tickets for {destination}</h1>
-            <ul>
-               {/* {t && t.map((str)=>{
-                    return(<li>{str}</li>)
-               })
-            } */}
-            <li>2pm</li>
-            <li>6pm</li>
-            <li>10pm</li>
-
-
-            </ul>
+        <div className="ticket">
+            
+            <p>Flight Name: {flightName} <br />
+                Location: {location} <br />
+                Time: {time} <br />
+            </p>
         </div>
     )
 }
