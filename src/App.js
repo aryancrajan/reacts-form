@@ -44,6 +44,7 @@ function App() {
 
       const data = await response.json();
       setSavedId(data.id);
+      console.log(data)
     } catch (error) {
       console.error('An error occurred:', error);
     }
@@ -165,9 +166,9 @@ function App() {
         )} */}
         
         { Object.entries(data).length > 0 && <h1>Available Tickets for: {data.destination}</h1>}
-        { Object.entries(data).length > 0 && <Ticket  flightName={x.t1.name} location={x.t1.location} time={x.t1.time}    /> }
-        { Object.entries(data).length > 0 && <Ticket  flightName={x.t2.name} location={x.t2.location} time={x.t2.time}    /> }
-        { Object.entries(data).length > 0 && <Ticket  flightName={x.t3.name} location={x.t3.location} time={x.t3.time}    /> }
+        { Object.entries(data).length > 0 && <Ticket Name={data.name} flightName={x.t1.name} location={x.t1.location} time={x.t1.time} id={x.t1.id}   /> }
+        { Object.entries(data).length > 0 && <Ticket Name={data.name} flightName={x.t2.name} location={x.t2.location} time={x.t2.time} id={x.t2.id}   /> }
+        { Object.entries(data).length > 0 && <Ticket Name={data.name} flightName={x.t3.name} location={x.t3.location} time={x.t3.time} id={x.t3.id}   /> }
     </div>
   );
 } 
